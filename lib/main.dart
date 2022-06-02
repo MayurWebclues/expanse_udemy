@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import './transactions.dart';
 
@@ -59,22 +60,20 @@ class MyHomePage extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(14),
-                      margin: EdgeInsets.symmetric(vertical: 15,horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFFFFF),
-                        border: Border.all(
-                          color: Colors.blueAccent,
-                          style: BorderStyle.solid,
-                          width: 2.0,
+                    ClipOval(
+                      child: Container(
+                        margin: EdgeInsets.all(10.0),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 18),
+                        color: Colors.orange,
+                        child: Text(
+                          '\$${tx.amount}',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
                         ),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '\$${tx.amount}',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.deepOrange),
                       ),
                     ),
                     Column(
@@ -83,15 +82,25 @@ class MyHomePage extends StatelessWidget {
                       children: [
                         Text(
                           tx.title,
-                          style: TextStyle(fontSize: 14 ,fontWeight: FontWeight.bold,color: Colors.black),
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         ),
                         Text(
-                          tx.date.toString(),
-                          style: TextStyle(fontSize: 12 ,fontWeight: FontWeight.w300,color: Colors.grey),
+                          DateFormat.yMMMd().format(tx.date),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.grey),
                         ),
                       ],
                     ),
-                    Icon(Icons.delete,color: Colors.red,size:20.0,)
+                    Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                      size: 20.0,
+                    )
                   ],
                 ),
               );
