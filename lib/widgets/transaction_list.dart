@@ -28,7 +28,7 @@ class TransactionList extends StatelessWidget {
                    child: SizedBox(
                      width: 50,
                      child: Text(
-                       '\$${transactions[index].amount}',
+                       '\$${transactions[index].amount.toStringAsFixed(2)}',
                        textAlign: TextAlign.center,
                        style: const TextStyle(
                            fontSize: 15,

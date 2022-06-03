@@ -26,6 +26,9 @@ class MyHomePage extends StatelessWidget {
         title: const Text(
           "HomePage",
         ),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.add))
+        ],
       ),
       body: SingleChildScrollView(
        child:Column(
@@ -49,7 +52,12 @@ class MyHomePage extends StatelessWidget {
           UserTransactions(), // main denominator for both the widgets
         ],
       ),
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        elevation:5 ,
+        onPressed: () {  },
+        child: Icon(Icons.add,size: 30),
+      ),floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
