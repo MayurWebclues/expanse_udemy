@@ -1,4 +1,4 @@
-import 'dart:ffi';
+import 'package:flutter/foundation.dart';
 
 class Transaction{
    late String id ;

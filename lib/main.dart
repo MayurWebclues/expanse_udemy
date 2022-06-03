@@ -1,7 +1,5 @@
+import 'package:expanse_udemy/widgets/user_transactions.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-import './transactions.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,12 +19,6 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  final List<Transaction> transaction = [
-    Transaction(id: "t1", title: "Shoes", amount: 10.00, date: DateTime.now()),
-    Transaction(
-        id: "t12", title: "Grocery", amount: 70.00, date: DateTime.now())
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +27,8 @@ class MyHomePage extends StatelessWidget {
           "HomePage",
         ),
       ),
-      body: Column(
+      body: SingleChildScrollView(
+       child:Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Card(
@@ -53,61 +46,10 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
           ),
-          Column(
-            children: transaction.map((tx) {
-              return Card(
-                elevation: 5,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    ClipOval(
-                      child: Container(
-                        margin: EdgeInsets.all(10.0),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8, vertical: 18),
-                        color: Colors.orange,
-                        child: Text(
-                          '\$${tx.amount}',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          tx.title,
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                        Text(
-                          DateFormat.yMMMd().format(tx.date),
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                      size: 20.0,
-                    )
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
+          UserTransactions(), // main denominator for both the widgets
         ],
       ),
+      )
     );
   }
 }
