@@ -1,5 +1,9 @@
+import 'package:expanse_udemy/widgets/add_transactions.dart';
+import 'package:expanse_udemy/widgets/transaction_list.dart';
 import 'package:expanse_udemy/widgets/user_transactions.dart';
 import 'package:flutter/material.dart';
+
+import 'models/transactions.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +22,33 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final List<Transaction> _transaction = [
+    Transaction(id: "t1", title: "Shoes", amount: 10.00, date: DateTime.now()),
+    Transaction(id: "t12", title: "Grocery", amount: 70.00, date: DateTime.now())
+  ];
+
+   void openSheet(BuildContext ctx){
+     showModalBottomSheet(context: ctx, builder: (bctx) {
+       return GestureDetector(
+         child: NewTransactions(_addNewTransactions),
+         onTap: () {},
+         behavior: HitTestBehavior.opaque,
+       );
+     });
+   }
+
+  void _addNewTransactions(String txName , double txAmount){
+    final txNew = Transaction(id: DateTime.now().toString(), title: txName, amount: txAmount, date: DateTime.now());
+    setState((){
+      _transaction.add(txNew);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +57,9 @@ class MyHomePage extends StatelessWidget {
           "HomePage",
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.add))
+          IconButton(onPressed: () {
+            openSheet(context);
+          }, icon: Icon(Icons.add))
         ],
       ),
       body: SingleChildScrollView(
@@ -49,13 +81,13 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
           ),
-          UserTransactions(), // main denominator for both the widgets
+          TransactionList(_transaction), // main denominator for both the widgets
         ],
       ),
       ),
       floatingActionButton: FloatingActionButton(
         elevation:5 ,
-        onPressed: () {  },
+        onPressed: () {  openSheet(context); },
         child: Icon(Icons.add,size: 30),
       ),floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
