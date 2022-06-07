@@ -10,7 +10,6 @@ class NewTransactions extends StatefulWidget {
 
 class _NewTransactionsState extends State<NewTransactions> {
   final textTitleController = TextEditingController();
-
   final textAmountController = TextEditingController();
 
   void onSubmitData(){
@@ -21,6 +20,16 @@ class _NewTransactionsState extends State<NewTransactions> {
     }
     widget.txNewTras(textTitleController.text,double.parse(textAmountController.text));
     Navigator.of(context).pop();
+  }
+  
+  void openDatePicker(){
+    showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2019), lastDate: DateTime.now()).then((value) {
+          if(value==null){
+            return;
+          } else {
+
+          }
+    });
   }
 
   @override
@@ -47,12 +56,19 @@ class _NewTransactionsState extends State<NewTransactions> {
               controller: textAmountController,
               onSubmitted: (_) => onSubmitData,
             ),
-            TextButton(
+            Row(
+              children: [
+                Text('No date choosen',style: Theme.of(context).textTheme.titleSmall,),
+                TextButton(onPressed: openDatePicker, child: Text('Choose Date',style: TextStyle(color: Colors.red,fontWeight: FontWeight.w300)))
+              ],
+            ),
+            ElevatedButton(
               onPressed: onSubmitData,
               child: const Text('Add Transactions'),
               style: ButtonStyle(
                   foregroundColor:
-                  MaterialStateProperty.all(Colors.black87)),
+                  MaterialStateProperty.all(Colors.white),backgroundColor: MaterialStateProperty.all(Colors.blue)),
+                  
             ),
           ],
         ),
