@@ -60,14 +60,21 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  void _addNewTransactions(String txName, double txAmount) {
+  void _addNewTransactions(
+      String txName, double txAmount, DateTime choosenDate) {
     final txNew = Transaction(
         id: DateTime.now().toString(),
         title: txName,
         amount: txAmount,
-        date: DateTime.now());
+        date: choosenDate);
     setState(() {
       _transaction.add(txNew);
+    });
+  }
+
+  void deleteTransactions(String id) {
+    return setState(() {
+      _transaction.removeWhere((element) => element.id == id);
     });
   }
 
@@ -77,7 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
         Duration(days: 7),
       ));
     }).toList();
-
   }
 
   @override
@@ -108,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Chart(recentTransactions!),
               ),
             ),
-            TransactionList(_transaction),
+            TransactionList(_transaction, deleteTransactions),
             // main denominator for both the widgets
           ],
         ),

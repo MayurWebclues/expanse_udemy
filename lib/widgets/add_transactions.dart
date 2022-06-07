@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewTransactions extends StatefulWidget {
-   final Function txNewTras;
+  final Function txNewTras;
+
   NewTransactions(this.txNewTras, {Key? key}) : super(key: key);
 
   @override
@@ -9,32 +11,40 @@ class NewTransactions extends StatefulWidget {
 }
 
 class _NewTransactionsState extends State<NewTransactions> {
-  final textTitleController = TextEditingController();
-  final textAmountController = TextEditingController();
+  final _textTitleController = TextEditingController();
+  final _textAmountController = TextEditingController();
+  DateTime? _selectedDate;
 
-  void onSubmitData(){
-    var txTitleTemp  =textTitleController.text;
-    var txAmountTemp  =textAmountController.text;
-    if(txTitleTemp.isEmpty || txAmountTemp.isEmpty){
+  void onSubmitData() {
+    var txTitleTemp = _textTitleController.text;
+    var txAmountTemp = _textAmountController.text;
+    if (txTitleTemp.isEmpty || txAmountTemp.isEmpty || _selectedDate==null) {
       return;
     }
-    widget.txNewTras(textTitleController.text,double.parse(textAmountController.text));
+    widget.txNewTras(
+        _textTitleController.text, double.parse(_textAmountController.text),_selectedDate);
     Navigator.of(context).pop();
   }
-  
-  void openDatePicker(){
-    showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2019), lastDate: DateTime.now()).then((value) {
-          if(value==null){
-            return;
-          } else {
 
-          }
+  void openDatePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2019),
+            lastDate: DateTime.now())
+        .then((value) {
+      if (value == null) {
+        return;
+      }
+      setState((){
+        _selectedDate = value;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Card(
+    return Card(
       child: Container(
         width: double.infinity,
         margin: EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 16),
@@ -46,29 +56,39 @@ class _NewTransactionsState extends State<NewTransactions> {
               decoration: InputDecoration(labelText: 'Title'),
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.next,
-              controller: textTitleController,
+              controller: _textTitleController,
               onSubmitted: (_) => onSubmitData,
             ),
             TextField(
               decoration: InputDecoration(labelText: 'Amount'),
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.done,
-              controller: textAmountController,
+              controller: _textAmountController,
               onSubmitted: (_) => onSubmitData,
             ),
             Row(
               children: [
-                Text('No date choosen',style: Theme.of(context).textTheme.titleSmall,),
-                TextButton(onPressed: openDatePicker, child: Text('Choose Date',style: TextStyle(color: Colors.red,fontWeight: FontWeight.w300)))
+                Expanded(
+                  child: Text(
+                  _selectedDate == null
+                        ? 'No date choosen'
+                        : DateFormat.yMd().format(_selectedDate!),
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+                TextButton(
+                    onPressed: openDatePicker,
+                    child: const Text('Choose Date',
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.w300)))
               ],
             ),
             ElevatedButton(
               onPressed: onSubmitData,
               child: const Text('Add Transactions'),
               style: ButtonStyle(
-                  foregroundColor:
-                  MaterialStateProperty.all(Colors.white),backgroundColor: MaterialStateProperty.all(Colors.blue)),
-                  
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
+                  backgroundColor: MaterialStateProperty.all(Colors.blue)),
             ),
           ],
         ),

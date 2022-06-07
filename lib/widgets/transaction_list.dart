@@ -5,8 +5,8 @@ import '../models/transactions.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
-
-  TransactionList(this.transactions);
+  final Function delTx;
+  TransactionList(this.transactions,this.delTx);
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +41,14 @@ class TransactionList extends StatelessWidget {
                           color: Colors.green,
                           shape: BoxShape.circle,
                         ),
-                        child: Center(
-                          child: ClipOval(
-                            child: Text(
-                              '\$${transactions[index].amount.toStringAsFixed(2)}',
-                              style: Theme.of(context).textTheme.subtitle1,
-                              textAlign: TextAlign.center,
+                        child: SizedBox(
+                          child: Center(
+                            child: ClipOval(
+                              child: Text(
+                                '\$${transactions[index].amount.toStringAsFixed(2)}',
+                                style: Theme.of(context).textTheme.subtitle1,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ),
@@ -74,14 +76,14 @@ class TransactionList extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Padding(
+                       Padding(
                         padding: EdgeInsets.only(
                           right: 16,
                         ),
-                        child: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                          size: 20.0,
+                        child: IconButton(icon: const Icon(Icons.delete), onPressed: () {
+                          delTx(transactions[index].id);
+                        },color: Colors.red,
+
                         ),
                       )
                     ],
