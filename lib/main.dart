@@ -1,13 +1,17 @@
+
 import 'package:expanse_udemy/widgets/add_transactions.dart';
 import 'package:expanse_udemy/widgets/chart.dart';
 import 'package:expanse_udemy/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'models/transactions.dart';
 
 void main() {
-  runApp(const MyApp());
-}
+      WidgetsFlutterBinding.ensureInitialized();
+      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.portraitUp]);
+       runApp(const MyApp());
+  }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -42,6 +46,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _showChart=false;
   final List<Transaction> _transaction = [
     /*Transaction(id: "t1", title: "Shoes", amount: 10.00, date: DateTime.now()),
     Transaction(
@@ -78,6 +83,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void toggleSwitch(){
+    if(_showChart==true){
+        setState((){
+           _showChart=false;
+        });
+    }
+    else {
+      setState((){
+        _showChart=true;
+      });
+    }
+  }
+
   List<Transaction>? get recentTransactions {
     return _transaction.where((element) {
       return element.date.isAfter(DateTime.now().subtract(
@@ -88,33 +106,51 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "HomePage",
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                openSheet(context);
-              },
-              icon: Icon(Icons.add))
-        ],
+    final appBar = AppBar(
+      title: const Text(
+        "HomePage",
       ),
+      actions: [
+        IconButton(
+            onPressed: () {
+              openSheet(context);
+            },
+            icon: Icon(Icons.add))
+      ],
+    );
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Card(
-              margin: EdgeInsets.all(8),
-              elevation: 5,
-              child: Container(
-                margin: const EdgeInsets.all(4),
-                width: double.infinity,
-                child: Chart(recentTransactions!),
+            Row(children: [
+              Text('Show Chart',style: Theme.of(context).textTheme.subtitle1,),
+              Switch(value: _showChart, onChanged: (val) {
+                toggleSwitch();
+              }),
+            ],),
+            _showChart==true ? Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.2,
+              child: Card(
+                margin: EdgeInsets.all(8),
+                elevation: 5,
+                child: Container(
+                  margin: const EdgeInsets.all(4),
+                  width: double.infinity,
+                  child: Chart(recentTransactions!),
+                ),
               ),
-            ),
-            TransactionList(_transaction, deleteTransactions),
+            ):
+            Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.7,
+                child: TransactionList(_transaction, deleteTransactions)),
             // main denominator for both the widgets
           ],
         ),
