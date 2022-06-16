@@ -1,3 +1,4 @@
+import 'package:expanse_udemy/widgets/adaptive_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -18,15 +19,16 @@ class _NewTransactionsState extends State<NewTransactions> {
   void onSubmitData() {
     var txTitleTemp = _textTitleController.text;
     var txAmountTemp = _textAmountController.text;
-    if (txTitleTemp.isEmpty || txAmountTemp.isEmpty || _selectedDate==null) {
+    if (txTitleTemp.isEmpty || txAmountTemp.isEmpty || _selectedDate == null) {
       return;
     }
-    widget.txNewTras(
-        _textTitleController.text, double.parse(_textAmountController.text),_selectedDate);
+    widget.txNewTras(_textTitleController.text,
+        double.parse(_textAmountController.text), _selectedDate);
     Navigator.of(context).pop();
   }
 
   void openDatePicker() {
+    print("TRUE");
     showDatePicker(
             context: context,
             initialDate: DateTime.now(),
@@ -36,7 +38,7 @@ class _NewTransactionsState extends State<NewTransactions> {
       if (value == null) {
         return;
       }
-      setState((){
+      setState(() {
         _selectedDate = value;
       });
     });
@@ -45,9 +47,10 @@ class _NewTransactionsState extends State<NewTransactions> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 5,
       child: Container(
         width: double.infinity,
-        margin: EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 16),
+        margin: EdgeInsets.only(left: 16, right: 16, top: 4, bottom: MediaQuery.of(context).viewInsets.bottom+10),
         padding: EdgeInsets.all(4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end, //input fields
@@ -70,17 +73,13 @@ class _NewTransactionsState extends State<NewTransactions> {
               children: [
                 Expanded(
                   child: Text(
-                  _selectedDate == null
+                    _selectedDate == null
                         ? 'No date choosen'
                         : DateFormat.yMd().format(_selectedDate!),
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
-                TextButton(
-                    onPressed: openDatePicker,
-                    child: const Text('Choose Date',
-                        style: TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.w300)))
+                AdaptiveElevatedButton('Choose Date', openDatePicker),
               ],
             ),
             ElevatedButton(

@@ -40,17 +40,21 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: groupTransactionsValues.map((data) {
-        return Flexible(
-            fit: FlexFit.tight,
-            flex: 1,
-            child: BarChart(
-                data['day'].toString(),
-                double.parse(data['amount'].toString()),
-                totalSpending == 0.0
-                    ? 0.0
-                    : (data['amount'] as double) / totalSpending));
+        return Container(
+
+          child: Flexible(
+              fit: FlexFit.tight,
+              flex: 1,
+              child: BarChart(
+                  data['day'].toString(),
+                  double.parse(data['amount'].toString()),
+                  totalSpending == 0.0
+                      ? 0.0
+                      : (data['amount'] as double) / totalSpending)),
+        );
       }).toList(),
     );
   }
